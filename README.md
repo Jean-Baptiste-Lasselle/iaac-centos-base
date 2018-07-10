@@ -161,3 +161,66 @@ $ export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
 $ export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
 $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 ```
+
+## Recette initialisation du cycle Infrastructure As Code
+
+```
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- ENV.
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+# export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
+export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
+export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- PREMIER GIT CLONE DU REPO VIDE
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+git clone "$URI_SSH_GIT_REMOTE/$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE" .
+
+
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- copiez collez dans le répertoire contenant le ".git", tous les fichiers et répertoires
+#     que vous souhaitez versionner
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- initialisation du cycle iaac
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+export MESSAGE_COMMIT=""
+# Pressez la touche flèche haute, double cliquez sur "MESSAGE_COMMIT" (ce qui copiera la chaîne de caractère "MESSAGE_COMMIT")
+export MESSAGE_COMMIT="$MESSAGE_COMMIT "
+# Pressez une deuxième fois la flèche haute, et complétez le message de commit: 
+export MESSAGE_COMMIT="$MESSAGE_COMMIT commit initial "
+# Et seulement alors, ajout de tous les fichiers commit && push
+
+export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
+```
+
+## Recette reprise du cycle Infrastructure As Code
+
+```
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- ENV.
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
+export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
+export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+# --- EDITEZ LE CODE SOURCE DE VOTRE RECETTE IAAC
+
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- reprise du cycle iaac
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+export MESSAGE_COMMIT=""
+# Pressez la touche flèche haute, double cliquez sur "MESSAGE_COMMIT" (ce qui copiera la chaîne de caractère "MESSAGE_COMMIT")
+export MESSAGE_COMMIT="$MESSAGE_COMMIT "
+# Pressez une deuxième fois la flèche haute, et complétez le message de commit: 
+export MESSAGE_COMMIT="$MESSAGE_COMMIT commit initial "
+# Et seulement alors, commit && push
+export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
+```
