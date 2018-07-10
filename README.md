@@ -141,7 +141,8 @@ Enfin, si vous avez exécuté exactement la procédure de clonage git précéden
 
 ```
 $ export MESSAGE_COMMIT=""
-$ # Pressez la tocue flèche haute, double cliquez sur "MESSAGE_COMMIT" (ce qui copiera la chaîne de caractère "MESSAGE_COMMIT")
+$ # Pressez la touche clavier "flèche haute", double cliquez sur "MESSAGE_COMMIT" (ce qui 
+# # copiera la chaîne de caractères  "MESSAGE_COMMIT" dans le presse-papier)
 $ export MESSAGE_COMMIT="$MESSAGE_COMMIT "
 $ # Pressez une deuxième fois la flèche haute, et complétez le message de commit:
 $ # export MESSAGE_COMMIT="$MESSAGE_COMMIT Vous compléterez ici le message de commit qui vous chante "
