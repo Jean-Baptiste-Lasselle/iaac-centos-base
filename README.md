@@ -121,19 +121,23 @@ $ cd $HOME
 $ export MAISON_OPERATIONS=$(pwd)/ma-meilleure-recette
 $ mkdir -p $MAISON_OPERATIONS
 $ cd $MAISON_OPERATIONS
-$ export **<font inherit/inherit;;#EE82EE;;inherit>NOM_DU_REPO_QUE_VOUS_AVEZ_CREE</font>** ="cycle-iaac"
-$ export <font inherit/inherit;;#006400;;inherit>**VOTRE_USERNAME_GITLAB**</font>="the-devops-guy"
-$ export GIT_SSH_COMMAND="ssh -p2222 -i ~/.ssh/id_rsa" && git clone "ssh://git@gitlab.bosstek.net:2222/<font inherit/inherit;;#006400;;inherit>**$VOTRE_USERNAME_GITLAB**</font>/**<font inherit/inherit;;#EE82EE;;inherit>$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE</font>**" .
+$ export NOM_DU_REPO_QUE_VOUS_AVEZ_CREE="cycle-iaac"
+$ export VOTRE_USERNAME_GITLAB="the-devops-guy"
+$ export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
+$ export NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB=gitlab.mon-entreprise.io
+$ export URI_SSH_GIT_REMOTE="ssh://git@$NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB:$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB"
+$ export GIT_SSH_COMMAND="ssh -p2222 -i ~/.ssh/id_rsa" && git clone "$URI_SSH_GIT_REMOTE/$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE" .
 $ echo "et pour vérifier...:"
 $ ls -all
 ```
 
-    Enfin, si vous avez exécuté exactement la procédure de clonage git précédente, vous pourrez entrer dans le cycle suivant:
+Enfin, si vous avez exécuté exactement la procédure de clonage git précédente, vous pourrez entrer dans le cycle suivant:
 
-    exécutez la recette
-    exécutez vos tests
-    interprétez vos tests
-    préparez votre message de commit, en suivant la boucle exacte (utilsiez putty ou un terminal shell classique):
+* exécutez la recette
+* exécutez vos tests
+* interprétez vos tests
+* préparez votre message de commit, en suivant la boucle exacte (utilsiez putty ou un terminal shell classique):
+
 ```
 $ export MESSAGE_COMMIT=""
 $ # Pressez la tocue flèche haute, double cliquez sur "MESSAGE_COMMIT" (ce qui copiera la chaîne de caractère "MESSAGE_COMMIT")
@@ -141,8 +145,9 @@ $ export MESSAGE_COMMIT="$MESSAGE_COMMIT "
 $ # Pressez une deuxième fois la flèche haute, et complétez le message de commit:
 $ # export MESSAGE_COMMIT="$MESSAGE_COMMIT Vous compléterez ici le message de commit qui vous chante "
 ```
-    apportez un changement au code source de la recette (avec vi)
-    faîtes le commit and push:
+apportez un changement au code source de la recette (avec vi)
+faîtes le commit and push:
+
 ```
 $ export MESSAGE_COMMIT=""
 $ # Pressez la touche flèche haute, double cliquez sur "MESSAGE_COMMIT" (ce qui copiera la chaîne de caractère "MESSAGE_COMMIT")
