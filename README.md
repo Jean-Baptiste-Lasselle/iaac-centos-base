@@ -156,6 +156,8 @@ $ export MESSAGE_COMMIT="$MESSAGE_COMMIT "
 $ # Pressez une deuxième fois la flèche haute, et complétez le message de commit: 
 $ export MESSAGE_COMMIT="$MESSAGE_COMMIT Modification de la fonction [ synchroniserAuSrvNTP () ] "
 $ # Et seulement alors, commit && push
-$ export GIT_SSH_COMMAND="ssh -p2222 -i ~/.ssh/id_rsa"
+$ # export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
+$ export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
+$ export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
 $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 ```
