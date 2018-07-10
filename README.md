@@ -1,10 +1,11 @@
 # iaac-centos-base
-Un repo qui documente la recette "pre-ssh", à appliquer sur un hôte CentOS fournit par le niveau IAAS, avant d'exécuter des recttes de cuisine Kytes 
+
+Un repo qui documente la recette "pre-ssh", à appliquer sur un hôte CentOS fournit par le niveau IAAS, avant d'exécuter des recettes de cuisine Kytes 
 
 
 # Procédure complète de provision "pre-SSH"
 
-Ce document décrit la procédure complète de provision d'une VM avant exécution des recettes:
+À l'issue de la procédure, on pourra exécuter des recettes telles que:
 
 * https://github.com/Jean-Baptiste-Lasselle/provision-hote-docker-sur-centos
 * https://github.com/Jean-Baptiste-Lasselle/provision-k8s
@@ -35,14 +36,10 @@ echo "proxy=http://$PROXY_SRV_HOST_OR_IP:$PROXY_SRV_IP_PORT_NUMBER/">> /etc/yum.
 
 ```
 
-### Installation / Configuration de Git
+### Installation de Git
 
 ```
 sudo yum install -y git
-git config --global user.email "jean.baptiste.lasselle.it@gmail.com" 
-git config --global user.name "Jean-Baptiste-Lasselle" 
-# Enfin, depuis Git 2.0 :
-git config --global push.default matching
 ```
 
 
@@ -59,6 +56,7 @@ ssh-keygen -t rsa -b 4096 && cat $HOME/.ssh/id_rsa.pub
 
 ### Vocabulaire
 IAAS: Infrastructure As A Service (ex.: OpenStack)
+IAAC: Infrastructure Adressed As Code
 
 ## Description du cycle Infrastructure As Code
 
@@ -173,6 +171,15 @@ $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 # export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
 export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
 export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- Configuration Git pour mon environnement de travail IAAC "Infrastructure Code Management Environnement"
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+git config --global user.email "jean.baptiste.lasselle.it@gmail.com" 
+git config --global user.name "Jean-Baptiste-Lasselle" 
+# Enfin, depuis Git 2.0 :
+git config --global push.default matching
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- PREMIER GIT CLONE DU REPO VIDE
