@@ -39,8 +39,8 @@ echo "proxy=http://$PROXY_SRV_HOST_OR_IP:$PROXY_SRV_IP_PORT_NUMBER/">> /etc/yum.
 
 ```
 sudo yum install -y git
-git config --global user.email "jb.lasselle@bosstek.net" 
-git config --global user.name "jb.lasselle" 
+git config --global user.email "jean.baptiste.lasselle.it@gmail.com" 
+git config --global user.name "Jean-Baptiste-Lasselle" 
 # Enfin, depuis Git 2.0 :
 git config --global push.default matching
 ```
@@ -52,26 +52,37 @@ Paire de clés asymétriques RSA:
 
 ```
 ssh-keygen -t rsa -b 4096 && cat $HOME/.ssh/id_rsa.pub
-# à copier pour ajouter la clé aux clefs SSH de votre utilisateur Gitlab / Bosstek
+# à copier pour ajouter la clé aux clefs SSH de votre utilisateur Gitlab
 ```
 
 # Cycles IAAC
 
- Description du cycle Infrastructure As Code
+### Vocabulaire
+IAAS: Infrastructure As A Service (ex.: OpenStack)
 
-Cycle élémentaire (sans mémoire des opérations)
+## Description du cycle Infrastructure As Code
 
-Le but de ce petit paragraphe, est de décrire un cycle élémentaire complet respectant Infrastructure As Code, applicable tel quel, dans l'infrastructure Bosstek.
+### Cycle élémentaire (sans mémoire des opérations)
 
-    On fait usage d'un utilisateur linux désigné par $UTILISATEUR
-    On créée une machine virtuelle uneVM , et on s'y connecte en tant qu'utilisateur linux $UTILISATEUR en utilisant le mot de passe fournit par l'adminsitrateur Bosstek ou le formateur.
-    On configure le package manager pour le proxy Bosstek:
+Le but de ce petit paragraphe, est de décrire un cycle élémentaire complet respectant Infrastructure As Code, applicable tel quel, dans l'infrastructure dans laquelle vos machines vivent.
 
-Pour CentOS, le package manager est yum, et il suffit, en tant que root, d'exécuter l'instruction ci-dessous pour appliquer la configuration:
+Le niveau IAAS créée une Machine Virtuelle `uneVM` sur laquelle est installé et configuré CentOS, avec 2 interfaces réseaux, connectée à des réseaux distincts (modèle OSI, niveau L2).
+
+On fait usage d'un nom d'utilisateur linux désigné par `$UTILISATEUR`, fournit par l'administrateur du niveau IAAS, 
+pour ouvrir une session ssh vers la machine `uneVM`.
+
+On configure le package manager pour le proxy de l'infrastructure:
+
+
 ```
+# -
+# Pour CentOS, le package manager est yum, et il suffit, en tant que
+# root, d'exécuter les commandes ci-dessous pour appliquer la configuration.
+# -
 $ sudo -i
 # echo "proxy=http://proxy:8080">> /etc/yum.conf
 # su $**UTILISATEUR**
+# -
 ```
 Pour les Ubuntu / Debian, le package manager est apt, et il suffit, en tant que root, d'exécuter les instructions ci-dessous pour appliquer la configuration:
 ```
@@ -80,7 +91,7 @@ $ sudo -i
 # echo "Acquire::https::proxy \"http://proxy:8080/\";">> /etc/apt/apt.conf
 # su $**UTILISATEUR**
 ```
-    On installe git dans la machine uneVM :
+On installe git dans la machine uneVM :
 
 CentOS:
 ```
@@ -90,20 +101,21 @@ Debian / Ubuntu:
 ```
 $ sudo apt-get install -y git
 ```
-    On génère une paire de clés asymétriques, sur uneVM , pour l'utilisateur $UTILISATEUR :
+On génère une paire de clés asymétriques, sur uneVM , pour l'utilisateur $UTILISATEUR :
 ```
 $ ssh-keygen -t rsa -b 4096
 $ cat $HOME/.ssh/id_rsa.pub
 ```
-    On utilisera un repository Git dans l'instance Gitlab Bosstek, afin de versionner une recette que l'on va concevoir.
-    Connectez-vous au Gitlab Bosstek (https://wgit.bosstek.net/) , avec le nom d'utilsiateur et le mot de passe fournis par votre formateur, puis:
+On utilisera un repository Git dans l'instance Gitlab, afin de versionner une recette que l'on va concevoir.
+Connectez-vous au Gitlab  (https://votre-serveur-gitlab/) , créez-vous un compte, puis:
 
-    Dans le coin haut-droit de la page web gitlab, vous trouverez le menu permettant de gérer votre compte utilsiateur Gitlab. Lorsque vous cliquez sur celui-ci, un menu déroulant aappraît, cliquez sur le sous-menu “Settings”. Pour indication, dans ce même menu, on trouve: le bouton “sign out”, les sous-menus “Profile” et “Help”.
-    Sur la gauche vous voyez maintenant un menu vertical , comportant un sous menu “SSH Keys”, cliquez sur ce sous-menu. Vous êtes maintenant dans une page, comportant un formulaire, et dans ce formulaire, collez la valeur de la clé publique que vous avevz générée. Vous pouvez afficher (et copier) la valeur de cette clé publique avec l'instruction:
+Dans le coin haut-droit de la page web gitlab, vous trouverez le menu permettant de gérer votre compte utilsiateur Gitlab. Lorsque vous cliquez sur celui-ci, un menu déroulant aappraît, cliquez sur le sous-menu “Settings”. Pour indication, dans ce même menu, on trouve: le bouton “sign out”, les sous-menus “Profile” et “Help”.
+    Sur la gauche vous voyez maintenant un menu vertical , comportant un sous menu “SSH Keys”, cliquez sur ce sous-menu. Vous êtes maintenant dans une page, comportant un formulaire, et dans ce formulaire, collez la valeur de la clé publique que vous avez générée. Vous pouvez afficher (et copier) la valeur de cette clé publique avec l'instruction:
 ```
 $ cat $HOME/.ssh/id_rsa.pub
 ```
-    Désormais, il est possible, dans la machine uneVM , pour l'utilisateur linux $UTILISATEUR, de cloner un repo auquel votre utilisateur Gitlab a accès (soit parce qu'on lui a donné accès à celui-ci, soit parce qu'il l'a créé), avec le protocole SSH, et en s'authentifiant 'silencieusement'. Vérifiez-le en exécutant:
+Désormais, il est possible, dans la machine uneVM , pour l'utilisateur linux $UTILISATEUR, de cloner un repo auquel votre utilisateur Gitlab a accès (soit parce qu'on lui a donné accès à celui-ci, soit parce qu'il l'a créé), avec le protocole SSH, et en s'authentifiant 'silencieusement'. Vérifiez-le en exécutant:
+
 ```
 $ cd $HOME
 $ export MAISON_OPERATIONS=$(pwd)/ma-meilleure-recette
@@ -115,6 +127,7 @@ $ export GIT_SSH_COMMAND="ssh -p2222 -i ~/.ssh/id_rsa" && git clone "ssh://git@g
 $ echo "et pour vérifier...:"
 $ ls -all
 ```
+
     Enfin, si vous avez exécuté exactement la procédure de clonage git précédente, vous pourrez entrer dans le cycle suivant:
 
     exécutez la recette
