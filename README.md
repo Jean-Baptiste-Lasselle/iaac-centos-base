@@ -89,7 +89,7 @@ Pour les Ubuntu / Debian, le package manager est apt, et il suffit, en tant que 
 $ sudo -i
 # echo "Acquire::http::proxy \"http://proxy:8080/\";">> /etc/apt/apt.conf
 # echo "Acquire::https::proxy \"http://proxy:8080/\";">> /etc/apt/apt.conf
-# su $**UTILISATEUR**
+# su $UTILISATEUR
 ```
 On installe git dans la machine uneVM :
 
