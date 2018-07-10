@@ -167,10 +167,60 @@ $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- ENV.
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+export MAISON_OPERATIONS
 
+export NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB=gitlab.mon-entreprise.io
 # export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
 export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
+
+# L'utilisateur a fournit la chaîne de caractères vide, pour
+# nom du repository Git surl lequel il souhaite travailler. 
+# Aucun nom de repository ne peut être fournit par défaut.
+export NOM_DU_REPO_QUE_VOUS_AVEZ_CREE
+
+export VOTRE_USERNAME_GITLAB="Jean-Baptiste-Lasselle"
 export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- FONCTIONS
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# Cette fonction permet de demander interactivement à l'utilisateur du
+# script, quel est le nom du repo git sur lequel il souhaite travailler
+# ERREURS: si le nom du repo choisit est vide.
+demander_NomRepoGit () {
+
+        echo "Quel est le nom du repository Git sur lequel vous souhaitez travailler?
+        echo " "
+        echo " "
+        read NOM_REPO_CHOISIT
+        # Vérifier l'existence du repo avec CURL ?
+        if [ "x$NOM_REPO_CHOISIT" = "x" ]
+        then
+          export MESSAGE_ERREUR=""
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR L'utilisateur a fournit la chaîne de caractères vide, pour"
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR nom du repository Git surl lequel il souhaite travailler. "
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR Aucun nom de repository ne peut être fournit par défaut."
+          $(>&2 echo "$MESSAGE_ERREUR") && exit 1
+        else
+          NOM_DU_REPO_QUE_VOUS_AVEZ_CREE=$NOM_REPO_CHOISIT
+        fi
+}
+
+
+
+
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# --- OPERATIONS
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+demander_NomRepoGit
+cd $HOME
+export MAISON_OPERATIONS=$(pwd)/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE
+mkdir -p $MAISON_OPERATIONS
+cd $MAISON_OPERATIONS
+
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- Configuration Git pour mon environnement de travail IAAC "Infrastructure Code Management Environnement"
