@@ -6,7 +6,7 @@ Un repo qui documente la recette "pre-ssh", à appliquer sur un hôte CentOS fou
 
 Ce document décrit la procédure complète de provision d'une VM avant exécution des recettes:
 
-* https://github.com/Jean-Baptiste-Lasselle/provision-hote-docker-centos-7
+* https://github.com/Jean-Baptiste-Lasselle/provision-hote-docker-sur-centos
 * https://github.com/Jean-Baptiste-Lasselle/provision-k8s
 
 
