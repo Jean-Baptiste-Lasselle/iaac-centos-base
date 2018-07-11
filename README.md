@@ -55,8 +55,9 @@ ssh-keygen -t rsa -b 4096 && cat $HOME/.ssh/id_rsa.pub
 # Cycles IAAC
 
 ### Vocabulaire
-IAAS: Infrastructure As A Service (ex.: OpenStack)
-IAAC: Infrastructure Adressed As Code
+
+* IAAS: Infrastructure As A Service (ex.: OpenStack)
+* IAAC: Infrastructure Adressed As Code
 
 ## Description du cycle Infrastructure As Code
 
