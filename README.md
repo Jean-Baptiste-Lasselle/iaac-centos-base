@@ -165,8 +165,7 @@ $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 ## Recette initialisation du cycle Infrastructure As Code
 
 ```
-
-
+#!/bin/bash
 # Création du fichier de script
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- ENV.
@@ -195,8 +194,14 @@ export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_r
 # L'utilisateur a fournit la chaîne de caractères vide, pour
 # nom du repository Git surl lequel il souhaite travailler. 
 # Aucun nom de repository ne peut être fournit par défaut.
+# 
 export NOM_DU_REPO_QUE_VOUS_AVEZ_CREE
 
+# - 
+#   Le chemin du répertoire contenant les fichiers à versionner
+# - 
+# 
+export REPERTOIRE_FICHIERS_A_VERSIONNER
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- FONCTIONS
@@ -226,6 +231,50 @@ demander_NomRepoGit () {
         fi
 }
 
+# --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+# Cette fonction permet de demander interactivement à l'utilisateur du
+# script, quel est le chemin du répertoire contenant les fichiers à récupérer.
+# Le contenu de ce répertoire sera copié tel quel et récursivement, à la racine
+# du repo local Git.
+# - 
+#  Dépendances: [demander_NomRepoGit ()] doit être exécutée avant
+# 
+# - 
+# 
+demander_CheminRepertoireFichiersAversionner () {
+
+        echo "Quel est le chemin du répertoire contenant les fichiers à versionner?"
+        echo " "
+        read NOM_REPERTOIRE_CHOISIT
+        echo " "
+        # Vérifier l'existence du repo avec CURL ?
+        if [ "x$NOM_REPERTOIRE_CHOISIT" = "x" ]
+        then
+          export MESSAGE_ERREUR=""
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR L'utilisateur a fournit un chaîne de caractères vide, pour"
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR le chemin du réperoire dans lequel sont les fichiers à versionner. "
+          export MESSAGE_ERREUR="$MESSAGE_ERREUR Aucun chemin ne peut être fournit par défaut."
+		  # un arrêt total des opérations, avec message d'erreur envoyé sur le canal standard d'erreur OS.
+          $(>&2 echo "$MESSAGE_ERREUR") && exit 1
+        else
+          REPERTOIRE_FICHIERS_A_VERSIONNER=$NOM_REPERTOIRE_CHOISIT
+        fi
+	if [ -d "$REPERTOIRE_FICHIERS_A_VERSIONNER" ]
+        then
+          export MESSAGE_INFO=""
+          export MESSAGE_INFO="$MESSAGE_INFO Le répertoire "
+	  export MESSAGE_INFO="$MESSAGE_INFO    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
+          export MESSAGE_INFO="$MESSAGE_INFO existe et va être copié dans pas . "
+        else
+          export MESSAGE_ERREUR3=""
+          export MESSAGE_ERREUR3="$MESSAGE_ERREUR3 Le répertoire "
+	  export MESSAGE_ERREUR3="$MESSAGE_ERREUR3    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
+          export MESSAGE_ERREUR3="$MESSAGE_ERREUR3 n'existe pas. Quels Fichiers souahitez-vous versionner?"
+          # un arrêt total des opérations, avec message d'erreur envoyé sur le canal standard d'erreur OS.
+          $(>&2 echo "$MESSAGE_ERREUR3") && exit 1
+        fi
+}
+
 
 
 
@@ -233,11 +282,14 @@ demander_NomRepoGit () {
 # --- OPERATIONS
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+
 demander_NomRepoGit
+demander_CheminRepertoireFichiersAversionner
+
 echo " DEBUG 1 - PWD= [$(pwd)]"
 echo " DEBUG 1 - NOM_DU_REPO_QUE_VOUS_AVEZ_CREE= [$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE]"
 read
-export MAISON_OPERATIONS=$(pwd)/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE
+export MAISON_OPERATIONS=$(pwd)/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE-$RANDOM
 rm -rf $MAISON_OPERATIONS
 mkdir -p $MAISON_OPERATIONS
 cd $MAISON_OPERATIONS
@@ -275,10 +327,10 @@ git clone "$URI_SSH_GIT_REMOTE:$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ
 
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-# --- copiez collez dans le répertoire contenant le ".git", tous les fichiers et répertoires
+# --- copie, dans le répertoire contenant le ".git", de tous les fichiers et répertoires
 #     que vous souhaitez versionner
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
+cp -rf $REPERTOIRE_FICHIERS_A_VERSIONNER/* .
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- initialisation du cycle iaac
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
