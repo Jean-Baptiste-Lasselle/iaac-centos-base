@@ -165,7 +165,8 @@ $ git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
 ## Recette initialisation du cycle Infrastructure As Code
 
 ```
-# Création du fichier de script
+
+
 # Création du fichier de script
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- ENV.
@@ -290,7 +291,7 @@ export MESSAGE_COMMIT="$MESSAGE_COMMIT commit initial "
 # Et seulement alors, ajout de tous les fichiers commit && push
 
 export GIT_SSH_COMMAND="ssh -p$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB -i ~/.ssh/id_rsa"
-git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push
+git add * *.* **/* && git commit -m "$MESSAGE_COMMIT" && git push --set-upstream origin master
 
 
 ```
