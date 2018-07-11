@@ -1,4 +1,5 @@
 #!/bin/bash
+# Création du fichier de script
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- ENV.
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -8,7 +9,11 @@ export MAISON_OPERATIONS
 export NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB=github.com
 # export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=2222
 export NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB=22
-export URI_SSH_GIT_REMOTE="ssh://git@$NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB:$NUMERO_PORT_IP_DE_VOTRE_SRV_GITLAB"
+
+export URI_SSH_GIT_REMOTE_FOR_GITLAB="ssh://git@$NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB"
+export URI_SSH_GIT_REMOTE_FOR_GITHUB="git@$NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB"
+# Valeur par défaut
+export URI_SSH_GIT_REMOTE=$URI_SSH_GIT_REMOTE_FOR_GITLAB
 
 
 export VOTRE_USERNAME_GITLAB="Jean-Baptiste-Lasselle"
@@ -82,8 +87,23 @@ git config --global push.default matching
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- PREMIER GIT CLONE DU REPO VIDE
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-git clone "$URI_SSH_GIT_REMOTE/$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE" .
 
+# - On détermine s'il s'agit de Github ou d'un Gitlab
+echo "$NOM_D_HOTE_OU_IP_DE_VOTRE_SRV_GITLAB" > ./es-ce-github.kytes
+export ES_CE_GITHUB=$(cat ./es-ce-github.kytes | grep github)
+
+if [ "x$ES_CE_GITHUB" = "x" ]
+then
+    echo "[$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE] : Il s'agit d'un repository dans un serveur Gitlab privé"
+	export URI_SSH_GIT_REMOTE=$URI_SSH_GIT_REMOTE_FOR_GITLAB 
+else
+    echo "[$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE] : Il s'agit d'un repository https://github.com"
+    export URI_SSH_GIT_REMOTE=$URI_SSH_GIT_REMOTE_FOR_GITHUB
+fi
+rm -f ./es-ce-github.kytes
+
+# - On fait le git clone
+git clone "$URI_SSH_GIT_REMOTE:$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE" .
 
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
