@@ -36,6 +36,8 @@ export NOM_DU_REPO_QUE_VOUS_AVEZ_CREE
 # 
 export REPERTOIRE_FICHIERS_A_VERSIONNER
 
+
+
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- FONCTIONS
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -63,7 +65,8 @@ demander_NomRepoGit () {
           NOM_DU_REPO_QUE_VOUS_AVEZ_CREE=$NOM_REPO_CHOISIT
         fi
 }
-
+demander_NomRepoGit
+export MAISON_OPERATIONS=$(pwd)/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE-$RANDOM
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # Cette fonction permet de demander interactivement à l'utilisateur du
 # script, quel est le chemin du répertoire contenant les fichiers à récupérer.
@@ -77,6 +80,9 @@ demander_NomRepoGit () {
 demander_CheminRepertoireFichiersAversionner () {
 
         echo "Quel est le chemin du répertoire contenant les fichiers à versionner?"
+        echo " "
+        echo " (ATTENTION: Si vous donnez un chein relatif, donnez-le relativement au )"
+        echo " ( répertoire [$MAISON_OPERATIONS] )"
         echo " "
         read NOM_REPERTOIRE_CHOISIT
         echo " "
@@ -96,12 +102,13 @@ demander_CheminRepertoireFichiersAversionner () {
         then
           export MESSAGE_INFO=""
           export MESSAGE_INFO="$MESSAGE_INFO Le répertoire "
-	  export MESSAGE_INFO="$MESSAGE_INFO    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
-          export MESSAGE_INFO="$MESSAGE_INFO existe et va être copié dans pas . "
+	      export MESSAGE_INFO="$MESSAGE_INFO    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
+          export MESSAGE_INFO="$MESSAGE_INFO existe et va être copié dans [ $(pwd) ]"
+		  echo "$MESSAGE_INFO"
         else
           export MESSAGE_ERREUR3=""
           export MESSAGE_ERREUR3="$MESSAGE_ERREUR3 Le répertoire "
-	  export MESSAGE_ERREUR3="$MESSAGE_ERREUR3    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
+	      export MESSAGE_ERREUR3="$MESSAGE_ERREUR3    [$REPERTOIRE_FICHIERS_A_VERSIONNER]   "
           export MESSAGE_ERREUR3="$MESSAGE_ERREUR3 n'existe pas. Quels Fichiers souahitez-vous versionner?"
           # un arrêt total des opérations, avec message d'erreur envoyé sur le canal standard d'erreur OS.
           $(>&2 echo "$MESSAGE_ERREUR3") && exit 1
@@ -116,17 +123,19 @@ demander_CheminRepertoireFichiersAversionner () {
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 
-demander_NomRepoGit
-demander_CheminRepertoireFichiersAversionner
+
 
 echo " DEBUG 1 - PWD= [$(pwd)]"
 echo " DEBUG 1 - NOM_DU_REPO_QUE_VOUS_AVEZ_CREE= [$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE]"
 read
-export MAISON_OPERATIONS=$(pwd)/$NOM_DU_REPO_QUE_VOUS_AVEZ_CREE-$RANDOM
+
 rm -rf $MAISON_OPERATIONS
 mkdir -p $MAISON_OPERATIONS
 cd $MAISON_OPERATIONS
 echo " DEBUG 2 - PWD= [$(pwd)]"
+
+
+demander_CheminRepertoireFichiersAversionner
 
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- Configuration Git pour mon environnement de travail IAAC "Infrastructure Code Management Environnement"
@@ -163,6 +172,7 @@ git clone "$URI_SSH_GIT_REMOTE:$VOTRE_USERNAME_GITLAB/$NOM_DU_REPO_QUE_VOUS_AVEZ
 # --- copie, dans le répertoire contenant le ".git", de tous les fichiers et répertoires
 #     que vous souhaitez versionner
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+echo " DEBUG 3 - PWD= [$(pwd)]"
 cp -rf $REPERTOIRE_FICHIERS_A_VERSIONNER/* .
 # --- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 # --- initialisation du cycle iaac
