@@ -100,7 +100,7 @@ Debian / Ubuntu:
 ```
 $ sudo apt-get install -y git
 ```
-On génère une paire de clés asymétriques, sur uneVM , pour l'utilisateur $UTILISATEUR :
+On génère une paire de clés asymétriques, sur `uneVM` , pour l'utilisateur `$UTILISATEUR` :
 ```
 $ ssh-keygen -t rsa -b 4096
 $ cat $HOME/.ssh/id_rsa.pub
