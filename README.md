@@ -11,7 +11,7 @@ Un repo qui documente la recette "pre-ssh", à appliquer sur un hôte CentOS fou
 * https://github.com/Jean-Baptiste-Lasselle/provision-k8s
 
 
-### Si vous utilisez LVM pour os disques durs virtuel de VMs
+### Si vous utilisez LVM pour vos disques durs virtuel de VMs
 
 Extension de capacité de disque LVM (afin d'attribuer donner "assez" d'espace disque libre sous `/var`, pour le moteur de conteneurs):
 
